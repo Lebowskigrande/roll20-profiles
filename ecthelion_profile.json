@@ -1,0 +1,879 @@
+{
+  "characterData": {
+    "meta": {
+      "version": "1.0",
+      "source": "lebowskigrande_149789668.docx",
+      "notes": "Auto-constructed from the uploaded Word doc. You can edit any fields to match your overlay's schema."
+    },
+    "identity": {
+      "name": "Ecthelion",
+      "player": "lebowskigrande",
+      "classes": [
+        {
+          "class": "Paladin",
+          "level": 1
+        },
+        {
+          "class": "Warlock",
+          "level": 6,
+          "subclass": "Celestial"
+        }
+      ],
+      "species": "Dragonborn (Silver)",
+      "background": "Custom Background",
+      "alignment": null
+    },
+    "proficiencyBonus": 3,
+    "speed": {
+      "walk": 30,
+      "fly": 0
+    },
+    "senses": {
+      "darkvision": 60,
+      "passivePerception": 9,
+      "passiveInsight": 9,
+      "passiveInvestigation": 9
+    },
+    "defenses": {
+      "resistances": [
+        "Cold",
+        "Radiant"
+      ],
+      "immunities": [
+        "Charmed",
+        "Frightened"
+      ]
+    },
+    "armorClass": 20,
+    "initiativeMod": 2,
+    "hp": {
+      "max": 54,
+      "current": 54,
+      "temp": 0,
+      "hitDice": "1d10 + 6d8"
+    },
+    "abilities": {
+      "str": {
+        "score": 13,
+        "mod": 1,
+        "save": 1,
+        "prof": false
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2,
+        "save": 2,
+        "prof": false
+      },
+      "con": {
+        "score": 14,
+        "mod": 2,
+        "save": 2,
+        "prof": false
+      },
+      "int": {
+        "score": 8,
+        "mod": -1,
+        "save": -1,
+        "prof": false
+      },
+      "wis": {
+        "score": 9,
+        "mod": -1,
+        "save": 2,
+        "prof": true
+      },
+      "cha": {
+        "score": 18,
+        "mod": 4,
+        "save": 7,
+        "prof": true
+      }
+    },
+    "skills": {
+      "acrobatics": {
+        "mod": 5,
+        "prof": true,
+        "ability": "dex"
+      },
+      "animalHandling": {
+        "mod": -1,
+        "prof": false,
+        "ability": "wis"
+      },
+      "arcana": {
+        "mod": 2,
+        "prof": true,
+        "ability": "int"
+      },
+      "athletics": {
+        "mod": 1,
+        "prof": false,
+        "ability": "str"
+      },
+      "deception": {
+        "mod": 4,
+        "prof": false,
+        "ability": "cha"
+      },
+      "history": {
+        "mod": -1,
+        "prof": false,
+        "ability": "int"
+      },
+      "insight": {
+        "mod": -1,
+        "prof": false,
+        "ability": "wis"
+      },
+      "intimidation": {
+        "mod": 4,
+        "prof": false,
+        "ability": "cha"
+      },
+      "investigation": {
+        "mod": -1,
+        "prof": false,
+        "ability": "int"
+      },
+      "medicine": {
+        "mod": -1,
+        "prof": false,
+        "ability": "wis"
+      },
+      "nature": {
+        "mod": -1,
+        "prof": false,
+        "ability": "int"
+      },
+      "perception": {
+        "mod": -1,
+        "prof": false,
+        "ability": "wis"
+      },
+      "performance": {
+        "mod": 7,
+        "prof": true,
+        "ability": "cha"
+      },
+      "persuasion": {
+        "mod": 7,
+        "prof": true,
+        "ability": "cha"
+      },
+      "religion": {
+        "mod": 2,
+        "prof": true,
+        "ability": "int"
+      },
+      "sleightOfHand": {
+        "mod": 2,
+        "prof": false,
+        "ability": "dex"
+      },
+      "stealth": {
+        "mod": 5,
+        "prof": true,
+        "ability": "dex"
+      },
+      "survival": {
+        "mod": -1,
+        "prof": false,
+        "ability": "wis"
+      }
+    },
+    "proficiencies": {
+      "armor": [
+        "Light",
+        "Medium",
+        "Heavy",
+        "Shields"
+      ],
+      "weapons": [
+        "Simple Weapons",
+        "Martial Weapons"
+      ],
+      "tools": [
+        "Longhorn",
+        "Lyre",
+        "Smith's Tools",
+        "Thelarr",
+        "Woodcarver's Tools"
+      ],
+      "languages": [
+        "Common",
+        "Draconic",
+        "Elvish"
+      ]
+    },
+    "features": {
+      "species": [
+        {
+          "name": "Draconic Ancestry (Silver)",
+          "type": "species",
+          "uses": {
+            "value": 3,
+            "max": 3,
+            "recharge": "longRest"
+          },
+          "short": "Breath weapon (cold): 15-ft cone or 30-ft line (5-ft wide). Dex save DC 13, 2d10 cold (half on success).",
+          "long": "When you take the Attack action, you can replace one attack with a cold breath weapon in a 15‑ft. cone or 30‑ft. by 5‑ft. line. Each creature makes a DC 13 Dex save, taking 2d10 cold damage on a failure or half as much on success."
+        },
+        {
+          "name": "Draconic Flight",
+          "type": "species",
+          "uses": {
+            "value": 1,
+            "max": 1,
+            "recharge": "longRest"
+          },
+          "short": "Bonus Action: gain fly speed equal to speed for 10 minutes.",
+          "long": "Once per long rest as a bonus action, spectral wings grant a fly speed equal to your speed for 10 minutes or until retracted or you are incapacitated."
+        },
+        {
+          "name": "Darkvision",
+          "type": "species",
+          "short": "60 ft."
+        },
+        {
+          "name": "Cold Resistance",
+          "type": "species",
+          "short": "Resistance to cold damage."
+        }
+      ],
+      "class": [
+        {
+          "name": "Pact Magic",
+          "class": "Warlock",
+          "level": 6
+        },
+        {
+          "name": "Magical Cunning",
+          "class": "Warlock",
+          "level": 2,
+          "uses": {
+            "value": 1,
+            "max": 1,
+            "recharge": "longRest"
+          }
+        },
+        {
+          "name": "Celestial Spells",
+          "class": "Warlock (Celestial)"
+        },
+        {
+          "name": "Healing Light",
+          "class": "Warlock (Celestial)",
+          "uses": {
+            "value": 7,
+            "max": 7,
+            "die": "d6",
+            "recharge": "longRest"
+          }
+        },
+        {
+          "name": "Radiant Soul",
+          "class": "Warlock (Celestial)",
+          "short": "+4 once per turn to radiant or fire spell damage."
+        },
+        {
+          "name": "Lay on Hands",
+          "class": "Paladin",
+          "level": 1,
+          "pool": 5
+        }
+      ],
+      "invocations": [
+        {
+          "name": "Pact of the Blade",
+          "short": "Bond or conjure a pact weapon. Can use CHA for attacks, set damage type to necrotic/psychic/radiant."
+        },
+        {
+          "name": "Pact of the Chain",
+          "short": "Learn Find Familiar and special familiar attack interaction."
+        },
+        {
+          "name": "Thirsting Blade",
+          "short": "Extra Attack with the pact weapon."
+        },
+        {
+          "name": "Eldritch Smite",
+          "short": "On hit with pact weapon, expend pact slot to add 4d8 force and knock prone (Huge or smaller)."
+        }
+      ],
+      "feats": [
+        {
+          "name": "War Caster",
+          "short": "Advantage on Con saves to maintain concentration; cast a spell instead of an OA; perform somatics with hands full."
+        },
+        {
+          "name": "Musician",
+          "short": "Instrument proficiency; grant Heroic Inspiration to up to 3 allies after a rest."
+        },
+        {
+          "name": "Skilled",
+          "short": "Gain three proficiencies (baked into skills/tools above)."
+        }
+      ]
+    },
+    "attacks": [
+      {
+        "name": "Dragon Slayer Longsword",
+        "type": "weapon",
+        "toHit": 5,
+        "dice": "1d8",
+        "dmgType": "Slashing",
+        "bonus": 2,
+        "properties": [
+          "Martial",
+          "Versatile",
+          "Mastery: Sap"
+        ],
+        "riders": [
+          "True Strike: +1d6+4 Radiant vs marked target (see feature)."
+        ]
+      },
+      {
+        "name": "Dragon's Wrath Spear (Slumbering)",
+        "type": "weapon",
+        "toHit": 8,
+        "dice": "1d6",
+        "dmgType": "Radiant",
+        "bonus": 5,
+        "properties": [
+          "Simple",
+          "Thrown (20/60)",
+          "Mastery: Sap"
+        ],
+        "riders": [
+          "+1d6 Cold",
+          "True Strike: +1d6+4 Radiant"
+        ]
+      },
+      {
+        "name": "Shortsword",
+        "type": "weapon",
+        "toHit": 5,
+        "dice": "1d6",
+        "dmgType": "Piercing",
+        "bonus": 2,
+        "properties": [
+          "Martial",
+          "Finesse",
+          "Light",
+          "Mastery: Vex"
+        ]
+      },
+      {
+        "name": "Eldritch Blast",
+        "type": "cantrip",
+        "toHit": 7,
+        "dice": "1d10",
+        "dmgType": "Force",
+        "count": 2,
+        "components": [
+          "V",
+          "S"
+        ]
+      },
+      {
+        "name": "Unarmed Strike",
+        "type": "weapon",
+        "toHit": 4,
+        "flatDamage": 2,
+        "dmgType": "Bludgeoning"
+      }
+    ],
+    "equipment": {
+      "attuned": [
+        "Scaled Ornament (Stirring)",
+        "Breastplate of Agathys",
+        "Dragon Vessel (Stirring)"
+      ],
+      "items": [
+        {
+          "name": "Shield +1",
+          "qty": 1,
+          "weight": 6
+        },
+        {
+          "name": "Adamantine Breastplate",
+          "qty": 1,
+          "weight": 20
+        },
+        {
+          "name": "Dragon Slayer Longsword",
+          "qty": 1,
+          "weight": 3
+        },
+        {
+          "name": "Dragon's Wrath Spear",
+          "qty": 1,
+          "weight": 3
+        },
+        {
+          "name": "Shortsword",
+          "qty": 1,
+          "weight": 2
+        },
+        {
+          "name": "Spear",
+          "qty": 1,
+          "weight": 3
+        },
+        {
+          "name": "Backpack",
+          "qty": 1,
+          "weight": 5
+        },
+        {
+          "name": "Crowbar",
+          "qty": 1,
+          "weight": 5
+        },
+        {
+          "name": "Hammer",
+          "qty": 1,
+          "weight": 3
+        },
+        {
+          "name": "Holy Water (flask)",
+          "qty": 1,
+          "weight": 1
+        },
+        {
+          "name": "Manacles",
+          "qty": 1,
+          "weight": 6
+        },
+        {
+          "name": "Mirror, Steel",
+          "qty": 1,
+          "weight": 0.5
+        },
+        {
+          "name": "Oil (flask)",
+          "qty": 1,
+          "weight": 1
+        },
+        {
+          "name": "Chest",
+          "qty": 1,
+          "weight": 25
+        },
+        {
+          "name": "Tinderbox",
+          "qty": 1,
+          "weight": 1
+        },
+        {
+          "name": "Torch",
+          "qty": 3,
+          "weight": 3
+        },
+        {
+          "name": "Potion of Healing",
+          "qty": 2,
+          "weight": 1
+        },
+        {
+          "name": "Instrument of Illusions (Longhorn)",
+          "qty": 1
+        },
+        {
+          "name": "Dragon Vessel (Stirring)",
+          "qty": 1
+        },
+        {
+          "name": "Scaled Ornament (Stirring)",
+          "qty": 1
+        },
+        {
+          "name": "Breastplate of Agathys",
+          "qty": 1
+        }
+      ],
+      "coins": {
+        "cp": 0,
+        "sp": 0,
+        "ep": 0,
+        "gp": 89,
+        "pp": 0
+      },
+      "carriedWeight": 115,
+      "encumberedAt": 195,
+      "pushDragLift": 390
+    },
+    "spellcasting": {
+      "spellAttackBonus": {
+        "paladin": 7,
+        "warlock": 7
+      },
+      "saveDC": {
+        "paladin": 15,
+        "warlock": 15
+      },
+      "slots": {
+        "pact": {
+          "level": 3,
+          "current": 2,
+          "max": 2
+        },
+        "level1": {
+          "current": 2,
+          "max": 2
+        },
+        "level2": {
+          "current": 0,
+          "max": 0
+        },
+        "level3": {
+          "current": 0,
+          "max": 0
+        }
+      },
+      "spellsByLevel": {
+        "0": [
+          {
+            "name": "True Strike",
+            "classes": [
+              "Warlock"
+            ],
+            "toHit": 7,
+            "time": "1 Action",
+            "range": "Self",
+            "components": [
+              "S",
+              "M"
+            ],
+            "duration": "Instant",
+            "short": "Empower a weapon strike (house rule in build)."
+          },
+          {
+            "name": "Eldritch Blast",
+            "classes": [
+              "Warlock"
+            ],
+            "toHit": 7,
+            "time": "1 Action",
+            "range": "120 ft",
+            "components": [
+              "V",
+              "S"
+            ],
+            "duration": "Instant",
+            "notes": "2 beams at this level."
+          },
+          {
+            "name": "Light",
+            "classes": [
+              "Warlock (Celestial Spells)"
+            ],
+            "prepared": true,
+            "time": "1 Action",
+            "range": "Touch",
+            "components": [
+              "V",
+              "M"
+            ],
+            "duration": "1 hour"
+          },
+          {
+            "name": "Sacred Flame",
+            "classes": [
+              "Warlock (Celestial Spells)"
+            ],
+            "save": "DEX 15",
+            "time": "1 Action",
+            "range": "60 ft",
+            "components": [
+              "V",
+              "S"
+            ],
+            "duration": "Instant"
+          }
+        ],
+        "1": [
+          {
+            "name": "Divine Smite",
+            "classes": [
+              "Paladin"
+            ],
+            "time": "1 Bonus Action",
+            "range": "Self",
+            "components": [
+              "V"
+            ],
+            "duration": "Instant"
+          },
+          {
+            "name": "Divine Favor",
+            "classes": [
+              "Paladin"
+            ],
+            "time": "1 Bonus Action",
+            "range": "Self",
+            "components": [
+              "V",
+              "S"
+            ],
+            "duration": "1 minute",
+            "concentration": true
+          },
+          {
+            "name": "Armor of Agathys",
+            "classes": [
+              "Warlock"
+            ],
+            "time": "1 Bonus Action",
+            "range": "Self",
+            "components": [
+              "V",
+              "S",
+              "M"
+            ],
+            "duration": "1 hour",
+            "concentration": false
+          },
+          {
+            "name": "Hex",
+            "classes": [
+              "Warlock"
+            ],
+            "time": "1 Bonus Action",
+            "range": "90 ft",
+            "components": [
+              "V",
+              "S",
+              "M"
+            ],
+            "duration": "Up to 1 hour",
+            "concentration": true
+          },
+          {
+            "name": "Hellish Rebuke",
+            "classes": [
+              "Warlock"
+            ],
+            "time": "Reaction",
+            "range": "60 ft",
+            "components": [
+              "V",
+              "S"
+            ],
+            "duration": "Instant",
+            "save": "DEX 15"
+          },
+          {
+            "name": "Cure Wounds",
+            "classes": [
+              "Celestial Spells"
+            ],
+            "time": "1 Action",
+            "range": "Touch",
+            "components": [
+              "V",
+              "S"
+            ],
+            "duration": "Instant",
+            "prepared": true
+          },
+          {
+            "name": "Guiding Bolt",
+            "classes": [
+              "Celestial Spells"
+            ],
+            "time": "1 Action",
+            "range": "120 ft",
+            "components": [
+              "V",
+              "S"
+            ],
+            "duration": "1 round",
+            "prepared": true
+          },
+          {
+            "name": "Find Familiar",
+            "classes": [
+              "Eldritch Invocation"
+            ],
+            "time": "1 Action",
+            "range": "10 ft",
+            "components": [
+              "V",
+              "S",
+              "M"
+            ],
+            "duration": "Instant",
+            "ritual": true
+          }
+        ],
+        "2": [
+          {
+            "name": "Invisibility",
+            "classes": [
+              "Warlock"
+            ],
+            "time": "1 Action",
+            "range": "Touch",
+            "components": [
+              "V",
+              "S",
+              "M"
+            ],
+            "duration": "Up to 1 hour",
+            "concentration": true
+          },
+          {
+            "name": "Aid",
+            "classes": [
+              "Celestial Spells"
+            ],
+            "time": "1 Action",
+            "range": "30 ft",
+            "components": [
+              "V",
+              "S",
+              "M"
+            ],
+            "duration": "8 hours",
+            "prepared": true
+          },
+          {
+            "name": "Lesser Restoration",
+            "classes": [
+              "Celestial Spells"
+            ],
+            "time": "1 Bonus Action",
+            "range": "Touch",
+            "components": [
+              "V",
+              "S"
+            ],
+            "duration": "Instant",
+            "prepared": true
+          }
+        ],
+        "3": [
+          {
+            "name": "Spirit Shroud",
+            "classes": [
+              "Warlock"
+            ],
+            "time": "1 Bonus Action",
+            "range": "Self",
+            "components": [
+              "V",
+              "S"
+            ],
+            "duration": "Up to 1 minute",
+            "concentration": true
+          },
+          {
+            "name": "Thunder Step",
+            "classes": [
+              "Warlock"
+            ],
+            "time": "1 Action",
+            "range": "90 ft",
+            "components": [
+              "V"
+            ],
+            "duration": "Instant",
+            "save": "CON 15"
+          },
+          {
+            "name": "Dispel Magic",
+            "classes": [
+              "Warlock"
+            ],
+            "time": "1 Action",
+            "range": "120 ft",
+            "components": [
+              "V",
+              "S"
+            ],
+            "duration": "Instant"
+          },
+          {
+            "name": "Daylight",
+            "classes": [
+              "Celestial Spells"
+            ],
+            "time": "1 Action",
+            "range": "60 ft / 60‑ft sphere",
+            "components": [
+              "V",
+              "S"
+            ],
+            "duration": "1 hour",
+            "prepared": true
+          },
+          {
+            "name": "Revivify",
+            "classes": [
+              "Celestial Spells"
+            ],
+            "time": "1 Action",
+            "range": "Touch",
+            "components": [
+              "V",
+              "S",
+              "M"
+            ],
+            "duration": "Instant",
+            "prepared": true
+          }
+        ]
+      }
+    },
+    "resources": {
+      "breathWeapon": {
+        "uses": {
+          "value": 0,
+          "max": 3,
+          "recharge": "longRest"
+        }
+      },
+      "draconicFlight": {
+        "uses": {
+          "value": 0,
+          "max": 1,
+          "recharge": "longRest"
+        }
+      },
+      "healingLight": {
+        "dicePool": {
+          "value": 7,
+          "size": "d6"
+        },
+        "recharge": "longRest"
+      },
+      "layOnHands": {
+        "pool": {
+          "value": 5,
+          "max": 5
+        },
+        "recharge": "longRest"
+      },
+      "pactSlots": {
+        "level": 3,
+        "value": 2,
+        "max": 2,
+        "recharge": "shortRest"
+      }
+    },
+    "ui": {
+      "rollTemplates": {
+        "simple": [
+          "rname",
+          "mod",
+          "r1",
+          "always",
+          "r2",
+          "charname"
+        ]
+      }
+    }
+  }
+}
