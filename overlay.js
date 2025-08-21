@@ -196,7 +196,7 @@
     const p = getSlotState(characterData, 'pact', '3');
     pactRow.innerHTML = Array.from({ length: p.max }, (_, i) => {
       const filled = i < p.cur;
-      return `<span class="slotDot ${filled ? 'filled' : 'empty'}" data-kind="pact" data-lvl="2" data-index="${i}" title="${filled ? 'Click to consume' : 'Click to recharge'}"></span>`;
+      return `<span class="slotDot ${filled ? 'filled' : 'empty'}" data-kind="pact" data-lvl="3" data-index="${i}" title="${filled ? 'Click to consume' : 'Click to recharge'}"></span>`;
     }).join('');
   }
 
