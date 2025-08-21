@@ -9,6 +9,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @run-at       document-idle
+// @connect raw.githubusercontent.com
 
 // --- external JS ---
 /* Host overlay.js somewhere stable (GitHub Pages/Netlify/Cloudflare Pages) */
