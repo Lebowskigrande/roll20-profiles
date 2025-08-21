@@ -9,6 +9,11 @@
     "WIS": { "score": 9, "prof": true },
     "CHA": { "score": 18, "prof": true }
   },
+  "ac": 20,
+  "passivePerception": 9,
+  "speed": "30 ft",
+  "hp": { "current": 54, "max": 54 }
+
   "attacks": [
     {
       "name": "Dragonspear",
