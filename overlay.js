@@ -193,7 +193,7 @@
       return `<span class="slotDot ${filled ? 'filled' : 'empty'}" data-kind="spell" data-lvl="1" data-index="${i}" title="${filled ? 'Click to consume' : 'Click to recharge'}"></span>`;
     }).join('');
 
-    const p = getSlotState(characterData, 'pact', '2');
+    const p = getSlotState(characterData, 'pact', '3');
     pactRow.innerHTML = Array.from({ length: p.max }, (_, i) => {
       const filled = i < p.cur;
       return `<span class="slotDot ${filled ? 'filled' : 'empty'}" data-kind="pact" data-lvl="2" data-index="${i}" title="${filled ? 'Click to consume' : 'Click to recharge'}"></span>`;
