@@ -1,148 +1,134 @@
 <div class="card" id="card">
-  <!-- Header -->
   <div class="header" id="drag">
     <div>
-      <div class="title"><span class="semibold">${characterData.name}</span></div>
-      <div class="sub">Level 7  •  AC 20  •  PP 9  •  Speed 30 ft.</div>
+      <div class="title" id="ov-name">${characterData?.name || '—'}</div>
+      <div class="sub">
+        AC <span id="ov-ac">${characterData?.ac ?? '—'}</span> •
+        PP <span id="ov-pp">${characterData?.passivePerception ?? '—'}</span> •
+        SPD <span id="ov-speed">${characterData?.speed ?? '—'}</span>
+      </div>
     </div>
-    <div style="display:flex;align-items:center;gap:8px;">
-      <button class="toggle" id="collapseAll" title="Collapse/Expand"><span class="chev" id="allChev">▾</span></button>
-    </div>
+    <div class="pillBadge">HP <span id="ov-hp">${characterData?.hp?.current ?? '—'}</span>/<span id="ov-hpmax">${characterData?.hp?.max ?? '—'}</span></div>
+    <button class="toggle" id="collapseAll" title="Collapse"><svg class="chev" id="allChev" viewBox="0 0 16 16"><path fill="currentColor" d="M4 6l4 4 4-4z"/></svg></button>
   </div>
 
   <div class="quickbar">
-    <div id="qbInitIcon" class="qbIcon" title="Initiative"></div>
+    <span class="qbIcon" id="qbInitIcon" title="Roll Initiative"></span>
+    <button class="qbtn" id="qbAttack">Attack</button>
     <button class="qbtn" id="qbSmite">Smite</button>
-    <button class="qbtn" id="qbAttack">${characterData.attacks[0]?.name ?? "Attack"}</button>
+
+    <div class="gmods" style="margin-left:auto">
+      <label>Shroud
+        <select id="gmShroud">
+          <option value="off">Off</option>
+          <option value="radiant">Radiant</option>
+          <option value="cold">Cold</option>
+          <option value="fire">Fire</option>
+          <option value="necrotic">Necrotic</option>
+          <option value="force">Force</option>
+        </select>
+      </label>
+      <label>Convert
+        <select id="gmConvert">
+          <option value="off">Off</option>
+          <option value="radiant">Radiant</option>
+          <option value="cold">Cold</option>
+          <option value="fire">Fire</option>
+          <option value="necrotic">Necrotic</option>
+          <option value="force">Force</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="gmBless"> Bless</label>
+    </div>
   </div>
 
-  <div class="body" id="bodyPane">
+  <div id="bodyPane">
     <div class="bodyInner">
-      <!-- Classic abilities -->
-      <div class="stats" id="stats">
-        <div class="block">
-          <div class="blockHead"><div></div><div>MOD</div><div>SAVE</div></div>
-          ${["STR","DEX","CON"].map(ABL=>ablRow(ABL)).join("")}
-        </div>
-        <div class="block">
-          <div class="blockHead"><div></div><div>MOD</div><div>SAVE</div></div>
-          ${["INT","WIS","CHA"].map(ABL=>ablRow(ABL)).join("")}
-        </div>
-      </div>
-
-      <!-- Tabs -->
       <div class="tabsWrap">
         <div class="tabBar" id="tabBar">
-          <button class="tab active" data-tab="attacks">Attacks</button>
-          <button class="tab" data-tab="features">Features</button>
+          <button class="tab active" data-tab="abilities">Abilities</button>
+          <button class="tab" data-tab="attacks">Attacks</button>
           <button class="tab" data-tab="skills">Skills</button>
           <button class="tab" data-tab="spells">Spells</button>
+          <button class="tab" data-tab="features">Features</button>
           <button class="tab" data-tab="inventory">Inventory</button>
         </div>
 
         <div class="tabPanels">
-          <!-- Attacks -->
-          <section class="tabPanel active" data-panel="attacks">
-            <!-- Global Modifiers -->
-            <div class="gmods" id="gmods">
-              <select id="gmShroud" title="Spirit Shroud">
-                <option value="off">Shroud: Off</option>
-                <option value="cold">Shroud: Cold (+1d8)</option>
-                <option value="radiant">Shroud: Radiant (+1d8)</option>
-                <option value="necrotic">Shroud: Necrotic (+1d8)</option>
-              </select>
-              <select id="gmConvert" title="Damage Conversion">
-                <option value="off">Convert: Off</option>
-                <option value="psychic">Convert: Psychic</option>
-                <option value="radiant">Convert: Radiant</option>
-                <option value="necrotic">Convert: Necrotic</option>
-              </select>
-              <label title="Bless (+1d4 to attack)"><input type="checkbox" id="gmBless"> <span class="semibold">Bless</span></label>
-            </div>
-
-            <div class="list" id="attackList">
-              <header><span>Name</span><span>Range</span><span>To Hit</span><span>Damage</span></header>
-              <div class="rows">
-                ${characterData.attacks.map((a,i)=>attackRowHTML(a,i)).join("")}
-              </div>
+          <!-- Abilities -->
+          <section class="tabPanel active" data-panel="abilities">
+            <div class="block">
+              <div class="blockHead"><div>Ability</div><div>Score</div><div>Mod</div><div>Save</div></div>
+              <div id="stats" class="rows"></div>
             </div>
           </section>
 
-          <!-- Features -->
-          <section class="tabPanel" data-panel="features">
-            <div class="list" id="featureList">
-              <header><span>Name</span><span></span><span>Charges</span><span></span></header>
-              <div class="rows">
-                ${(() => {
-                  const withIdx = characterData.features.map((f, idx) => ({ f, idx }));
-                  withIdx.sort((a, b) => {
-                    const aHas = Number.isFinite(a.f.chargesMax);
-                    const bHas = Number.isFinite(b.f.chargesMax);
-                    if (aHas && !bHas) return -1;
-                    if (!aHas && bHas) return 1;
-                    return 0;
-                  });
-                  return withIdx.map(({ f, idx }) => featureRowHTML(f, idx)).join("");
-                })()}
-              </div>
+          <!-- Attacks -->
+          <section class="tabPanel" data-panel="attacks">
+            <div class="list" id="attackList">
+              <header><div>Name</div><div>Range</div><div>To Hit</div><div>Damage</div></header>
+              <div class="rows"></div>
             </div>
           </section>
 
           <!-- Skills -->
           <section class="tabPanel" data-panel="skills">
             <div class="list" id="skillList">
-              <header><span>Name</span><span>Ability</span><span>Bonus</span><span></span></header>
-              <div class="rows">
-                ${characterData.skills.map((s,i)=>skillRowHTML(s,i)).join("")}
-              </div>
+              <header><div>Skill</div><div>Ability</div><div>Total</div><div>Prof</div></header>
+              <div class="rows"></div>
             </div>
           </section>
 
           <!-- Spells -->
           <section class="tabPanel" data-panel="spells">
-            <div class="list" id="spellGroups">
-            <!-- built dynamically -->
+            <div class="slotsPanel">
+              <div class="slotGroupInline"><span class="slotsTitle">Spell Slots:</span><div class="slotsRow" id="spellSlotsRow"></div></div>
+              <div class="slotGroupInline"><span class="slotsTitle">Pact Slots:</span><div class="slotsRow" id="pactSlotsRow"></div></div>
+            </div>
+            <div id="spellGroups"></div>
+          </section>
+
+          <!-- Features -->
+          <section class="tabPanel" data-panel="features">
+            <div class="list" id="featureList">
+              <header><div>Name</div><div></div><div>Charges</div><div></div></header>
+              <div class="rows"></div>
             </div>
           </section>
-          
+
           <!-- Inventory -->
           <section class="tabPanel" data-panel="inventory">
             <div class="list" id="magicList">
-              <header><span>Name</span><span></span><span>Charges</span><span></span></header>
-              <div class="rows">
-                ${characterData.inventory.magic.map((m,i)=>magicRowHTML(m,i)).join("")}
-              </div>
-            </div>
-            <div class="list" id="mundaneList" style="margin-top:6px;">
-              <header><span>Name</span><span></span><span></span><span>Qty</span></header>
-              <div class="rows">
-                ${characterData.inventory.mundane.map(mi=>mundaneRowHTML(mi)).join("")}
-              </div>
+              <header><div>Magic Item</div><div></div><div>Charges</div><div></div></header>
+              <div class="rows"></div>
             </div>
           </section>
-        </div> 
+        </div>
       </div>
     </div>
   </div>
-  <div class="modalMask" id="smiteMask" part="modal">
-    <div class="menu" id="smiteMenu" role="dialog" aria-modal="true" aria-labelledby="smiteTitle">
-      <div class="menuHdr" id="smiteTitle">Smite</div>
-      <div class="menuBody">
-        <div class="optionLine">
-          <label><input type="checkbox" id="optSpell"> <span class="semibold">Spell Slot (1st)</span></label>
-          <label><input type="checkbox" id="optPact"> <span class="semibold">Pact Slot (2nd)</span></label>
-        </div>
-        <div class="optionLine">
-          <label class="subtle"><input type="checkbox" id="optUndead"> Undead Target (Divine +1d8)</label>
-          <label class="subtle"><input type="checkbox" id="optProne"> Knock Prone (Eldritch)</label>
-          <label class="subtle"><input type="checkbox" id="optCrit"> Critical Hit (double dice)</label>
-        </div>
-        <div class="subtle">Tip: select either slot or both; Roll posts a compact damage card with types.</div>
+</div>
+
+<!-- Smite menu (modal) -->
+<div class="modalMask" id="smiteMask">
+  <div class="menu" id="smiteMenu">
+    <div class="menuHdr">Smite</div>
+    <div class="menuBody">
+      <div class="optionLine">
+        <label><input type="checkbox" id="optSpell" checked> Divine Smite (1st)</label>
+        <label><input type="checkbox" id="optPact"> Eldritch Smite (2nd)</label>
       </div>
-      <div class="menuBtns">
-        <button class="btn" id="smiteCancel">Cancel</button>
-        <button class="btn primary" id="smiteRoll">Roll Smite</button>
+      <div class="optionLine">
+        <label><input type="checkbox" id="optUndead"> Undead target (+1d8)</label>
+        <label><input type="checkbox" id="optProne"> Attempt Knock Prone</label>
       </div>
+      <div class="optionLine">
+        <label><input type="checkbox" id="optCrit"> Critical Hit (double dice)</label>
+      </div>
+    </div>
+    <div class="menuBtns">
+      <button class="btn" id="smiteCancel">Cancel</button>
+      <button class="btn primary" id="smiteRoll">Roll</button>
     </div>
   </div>
 </div>
