@@ -6,182 +6,19 @@
 // @run-at       document-idle
 // ==/UserScript==
 
-(function(){
-  // ---------- Character model (example seed) ----------
-  const characterData = {
-    name: "Ecthelion",
-    profBonus: 3,
-    abilities: {
-      STR: { score:13, mod:+1, save:+1 },
-      DEX: { score:14, mod:+2, save:+2 },
-      CON: { score:14, mod:+2, save:+2 },
-      INT: { score: 8, mod:-1, save:-1 },
-      WIS: { score: 9, mod:-1, save:+2 },
-      CHA: { score:18, mod:+4, save:+7 },
-    },
-    attacks: [
-      { name:"Dragonspear", abl:"CHA", prof:true, misc:0, magic:1, dmg1:"1d6", dmg1type:"Piercing", dmg2:"1d6", dmg2type:"Fire", addAblToDamage:true, damageBonus:0, range:"5 ft" },
-      { name:"True Strike", abl:"CHA", prof:true, misc:0, magic:1, dmg1:"3d6", dmg1type:"Radiant", addAbleToDamage:true, damageBonus:4, range:"5 ft" },
-      { name:"Leafwarden", abl:"CHA", prof:true, misc:0, magic:1, dmg1:"1d8", dmg1type:"Slashing", addAblToDamage:true, damageBonus:0, range:"5 ft" },
-      { name:"Leafwarden vs. Dragons", abl:"CHA", prof:true, misc:0, magic:1, dmg1:"1d8+3d6", dmg1type:"Slashing", addAblToDamage:true, damageBonus:0, range:"5 ft" },
-
-    ],
-    // Spell slots (persisted current via GM_setValue)
-    spellSlots: { "1": { max: 2 } },  // 1st-level Spell slots
-    pactSlots:  { "3": { max: 2 } },  // 3rd-level Pact slots
-
-    features: [
-      { name:"Lay on Hands", text:`Your blessed touch can heal wounds. You have a pool of healing power that replenishes when you finish a Long Rest. With that pool, you can restore a total number of Hit Points equal to five times your Paladin level.
-
-As a Bonus Action, you can touch a creature (which could be yourself) and draw power from the pool of healing to restore a number of Hit Points to that creature, up to the maximum amount remaining in the pool.
-
-You can also expend 5 Hit Points from the pool of healing power to remove the Poisoned condition from the creature; those points don’t also restore Hit Points to the creature.`, chargesMax:5 },
-      { name:"Weapon Mastery", text:`Your training with weapons allows you to use the mastery properties of two kinds of weapons of your choice with which you have proficiency.
-
-Whenever you finish a Long Rest, you can change the kinds of weapons you chose.
-
-Weapons: Spear (Sap), Longsword (Sap).
-Sap. If you hit a creature with a Spear, that creature has Disadvantage on its next attack roll before the start of your next turn.` },
-      { name:"Pact of the Chain", text:`You learn the Find Familiar spell and can cast it as a Magic action without expending a spell slot.
-
-When you cast the spell, you choose one of the normal forms for your familiar or one of the following special forms: Imp, Pseudodragon, Quasit, Skeleton, Slaad Tadpole, Sphinx of Wonder, Sprite, or Venomous Snake.
-
-Additionally, when you take the Attack action on your turn, you can forgo one of your own attacks to allow your familiar to make one attack of its own with its Reaction.` },
-
-      { name:"Pact of the Blade",  text:`As a Bonus Action, you can conjure a pact weapon in your hand—a Simple or Martial Melee weapon of your choice with which you bond—or create a bond with a magic weapon you touch; you can’t bond with a magic weapon if someone else is attuned to it or another Warlock is bonded with it. Until the bond ends, you have proficiency with the weapon, and you can use it as a Spellcasting Focus.
-
-Whenever you attack with the bonded weapon, you can use your Charisma modifier for the attack and damage rolls instead of using Strength or Dexterity; and you can cause the weapon to deal Necrotic, Psychic, or Radiant damage or its normal damage type.
-
-Your bond with the weapon ends if you use this feature’s Bonus Action again, if the weapon is more than 5 feet away from you for 1 minute or more, or if you die. A conjured weapon disappears when the bond ends.` },
-      { name:"Thirsting Blade", text:`You gain the Extra Attack feature for your pact weapon only. With that feature, you can attack twice with the weapon instead of once when you take the Attack action on your turn.` },
-      { name:"Eldritch Smite", text:`Once per turn when you hit a creature with your pact weapon, you can expend a Pact Magic spell slot to deal an extra 1d8 Force damage to the target, plus another 1d8 per level of the spell slot, and you can give the target the Prone condition if it is Huge or smaller.` },
-      { name:"Lessons of the First Ones", text:`You have received knowledge from an elder entity of the multiverse, allowing you to gain one Origin feat of your choice.` },
-      { name:"Healing Light", text:`You gain the ability to channel celestial energy to heal wounds. You have a pool of d6s to fuel this healing. The number of dice in the pool equals 1 plus your Warlock level.
-
-As a Bonus Action, you can heal yourself or one creature you can see within 60 feet of yourself, expending dice from the pool. The maximum number of dice you can expend at once equals your Charisma modifier (minimum of one die). Roll the dice you expend, and restore a number of Hit Points equal to the roll’s total. Your pool regains all expended dice when you finish a Long Rest.`, chargesMax:6},
-      { name:"Breath Weapon", text:`When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot Cone or a 30-foot Line that is 5 feet wide (choose the shape each time). Each creature in that area must make a Dexterity saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 Cold damage. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach character levels 5 (2d10), 11 (3d10), and 17 (4d10).
-
-You can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest.`, chargesMax:3 },
-      { name:"Draconic Resistance", text:`You have resistance to Cold Damage.` },
-      { name:"Draconic Flight", text:`When you reach character level 5, you can channel draconic magic to give yourself temporary flight. As a Bonus Action, you sprout spectral wings on your back that last for 10 minutes or until you retract the wings (no action required) or have the Incapacitated condition. During that time, you have a Fly Speed equal to your Speed. Your wings appear to be made of the same energy as your Breath Weapon. Once you use this trait, you can’t use it again until you finish a Long Rest.`, chargesMax:1 },
-      { name:"War Caster", text:`Concentration. You have Advantage on Constitution saving throws that you make to maintain Concentration.
-
-Reactive Spell. When a creature provokes an Opportunity Attack from you by leaving your reach, you can take a Reaction to cast a spell at the creature rather than making an Opportunity Attack. The spell must have a casting time of one action and must target only that creature.
-
-Somatic Components. You can perform the Somatic components of spells even when you have weapons or a Shield in one or both hands.` },
-
-      { name:"Smite", text:`Quick smite roller for Divine (1st) and Eldritch (3rd).
-Pick slot(s) and options, then roll. Pact → Force (3d8 at 2nd). Spell → Radiant (2d8; +1d8 vs Undead). Crit doubles dice.`,
-        smiteLauncher:true
-      },
-      { name:"Magical Cunning", text:`You can perform an esoteric rite for 1 minute. At the end of it, you regain expended Pact Magic spell slots but no more than a number equal to half your maximum (round up). Once you use this feature, you can’t do so again until you finish a Long Rest.`, chargesMax:1 },
-      { name:"Radiant Soul", text:`Your link to your patron allows you to serve as a conduit for radiant energy. You have Resistance to Radiant damage. Once per turn, when a spell you cast deals Radiant or Fire damage, you can add your Charisma modifier to that spell’s damage against one of the spell’s targets.` },
-    ],
-    skills: [
-      { key:"Acrobatics", abl:"DEX", prof:true },{ key:"Animal Handling", abl:"WIS", prof:false },
-      { key:"Arcana", abl:"INT", prof:true },{ key:"Athletics", abl:"STR", prof:false },
-      { key:"Deception", abl:"CHA", prof:false },{ key:"History", abl:"INT", prof:false },
-      { key:"Insight", abl:"WIS", prof:false },{ key:"Intimidation", abl:"CHA", prof:false },
-      { key:"Investigation", abl:"INT", prof:false },{ key:"Medicine", abl:"WIS", prof:false },
-      { key:"Nature", abl:"INT", prof:true },{ key:"Perception", abl:"WIS", prof:false },
-      { key:"Performance", abl:"CHA", prof:true },{ key:"Persuasion", abl:"CHA", prof:true },
-      { key:"Religion", abl:"INT", prof:true },{ key:"Sleight of Hand", abl:"DEX", prof:false },
-      { key:"Stealth", abl:"DEX", prof:true },{ key:"Survival", abl:"WIS", prof:false },
-    ],
-// --- Spells: structured for grouping, chips, casting, and roll msgs ---
-spells: [
-  // Cantrips (level: 0)
-  {
-    level: 0,
-    name: "Eldritch Blast",
-    components: { v:true, s:true, m:false },
-    ritual: false, concentration: false,
-    short: "Make a ranged spell attack; on hit, 1d10 force.",
-    long: `Beam(s) of crackling energy streak toward a creature. At higher character levels, you create additional beams.`,
-    cast: null, // no slot consumption for cantrips
-    macro: `&{template:atkdmg} {{rname=Eldritch Blast}} {{attack=1}} {{r1=[[1d20+@{selected|spell_attack_bonus}]]}} {{always=1}} {{r2=[[1d20+@{selected|spell_attack_bonus}]]}} {{damage=1}} {{dmg1=[[1d10]]}} {{dmg1type=Force}} {{charname=${"Ecthelion"}}}`
-  },
-  // 1st‑level (kept your examples)
-  {
-    level: 1,
-    name: "Bless",
-    components: { v:true, s:true, m:true },
-    ritual: false, concentration: true,
-    short: "+1d4 to attacks & saves (conc).",
-    long: `Up to three creatures of your choice gain a +1d4 bonus to attack rolls and saving throws while you maintain Concentration.`,
-    cast: { kind: "spell", slotLevel: 1 },
-    macro: `/em casts Bless (up to 3 creatures gain +1d4 to attacks & saves while concentrating).`
-  },
-  {
-    level: 1,
-    name: "Shield of Faith",
-    components: { v:true, s:true, m:true },
-    ritual: false, concentration: true,
-    short: "+2 AC (conc).",
-    long: `A shimmering field appears and gives +2 AC for the duration while you maintain Concentration.`,
-    cast: { kind: "spell", slotLevel: 1 },
-    macro: `/em casts Shield of Faith (+2 AC, Concentration).`
-  },
-
-  // 2nd‑level
-  {
-    level: 2,
-    name: "Invisibility",
-    components: { v:true, s:true, m:true },
-    ritual: false, concentration: true,
-    short: "Turn a creature invisible (conc).",
-    long: `A creature you touch becomes invisible until the spell ends. The spell ends early if the target attacks or casts a spell.`,
-    // Paladin/learned slot: tries 2nd‑level **spell** slot; if you only have pact slots, change kind:"pact" and slotLevel:2
-    cast: { kind: "spell", slotLevel: 2 },
-    macro: `/em casts Invisibility (Concentration).`
-  },
-
-  // 3rd‑level (they’ll render even if you currently have no 3rd‑level slots)
-  {
-    level: 3,
-    name: "Spirit Shroud",
-    components: { v:true, s:true, m:false },
-    ritual: false, concentration: true,
-    short: "Attacks deal +1d8 cold/rad/nec; speed reduced (conc).",
-    long: `You call forth spirits to assist you, dealing +1d8 extra damage (cold, radiant, or necrotic of your choice) on your attacks; affected targets can’t regain HP and have -10 ft speed while you concentrate.`,
-    cast: { kind: "spell", slotLevel: 3 },
-    macro: `/em casts Spirit Shroud (choose damage type; Concentration).`
-  },
-  {
-    level: 3,
-    name: "Thunder Step",
-    components: { v:true, s:true, m:false },
-    ritual: false, concentration: false,
-    short: "Teleport; thunder damage at origin.",
-    long: `You teleport up to 90 ft, and each creature within 10 ft of the space you left takes thunder damage on a failed save.`,
-    cast: { kind: "spell", slotLevel: 3 },
-    macro: `&{template:atkdmg} {{rname=Thunder Step}} {{damage=1}} {{dmg1=[[3d10]]}} {{dmg1type=Thunder}} {{charname=${"Ecthelion"}}}`
-  },
-],
-
-    inventory: {
-      magic: [
-        // Add chargesMax to any that should be consumable
-        { name:"Dragon's Wrath Spear",   rarity:"rare", },
-        { name:"Dragonslayer Longsword", rarity:"rare" },
-        { name:"Enspelled Breastplate",  rarity:"uncommon", chargesMax:6 },
-        { name:"Shield +1",              rarity:"uncommon" },
-        { name:"Scaled Ornament",        rarity:"uncommon", },
-        { name:"Adamantine Breastplate", rarity:"uncommon" },
-        { name:"Instrument of Illusions",rarity:"common" },
-      ],
-      mundane: [
-        { name:"Rations (days)", qty:5 },
-        { name:"Rope (50 ft)",   qty:1 },
-      ]
+(async function(){
+  // ---------- Character model (imported from JSON) ----------
+  async function importCharacterData(url){
+    const res = await fetch(url);
+    const data = await res.json();
+    for (const abl of Object.keys(data.abilities || {})){
+      const a = data.abilities[abl];
+      a.saveProf = (typeof a.save === 'number') ? ((a.save - a.mod) >= data.profBonus) : false;
     }
-  };
-
-  // Derive save proficiency flags from given numbers
-  for (const abl of Object.keys(characterData.abilities)) {
-    const a = characterData.abilities[abl];
-    a.saveProf = (typeof a.save === 'number') ? ((a.save - a.mod) >= characterData.profBonus) : false;
+    return data;
   }
+
+  const characterData = await importCharacterData('ecthelion_profile.json');
 
   // ---------- Persistent global damage modifiers ----------
   function getGlobalMods(){
