@@ -1,4 +1,4 @@
-// ==UserScript==
+// ==UserScript== for Tampermonkey
 // @name         Roll20 Overlay (Loader)
 // @namespace    https://yourdomain.example
 // @version      1.0.0
