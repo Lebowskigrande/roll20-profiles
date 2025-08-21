@@ -1,130 +1,259 @@
 {
   "name": "Ecthelion",
-  "ac": 18,
-  "passivePerception": 15,
-  "speed": 30,
-  "hp": { "current": 52, "max": 52 },
   "profBonus": 3,
-
   "abilities": {
-    "STR": { "score": 16, "mod": 3, "save": 6 },
-    "DEX": { "score": 14, "mod": 2 },
-    "CON": { "score": 14, "mod": 2 },
-    "INT": { "score": 10, "mod": 0 },
-    "WIS": { "score": 12, "mod": 1, "save": 4 },
-    "CHA": { "score": 18, "mod": 4, "save": 7 }
+    "STR": { "score": 13, "prof": false },
+    "DEX": { "score": 14, "prof": false },
+    "CON": { "score": 14, "prof": false },
+    "INT": { "score": 8, "prof": false },
+    "WIS": { "score": 9, "prof": true },
+    "CHA": { "score": 18, "prof": true }
   },
-
-  "skills": [
-    { "key": "Athletics",     "abl": "STR", "prof": true  },
-    { "key": "Perception",    "abl": "WIS", "prof": true  },
-    { "key": "Intimidation",  "abl": "CHA", "prof": true  },
-    { "key": "Stealth",       "abl": "DEX", "prof": false }
-  ],
-
   "attacks": [
     {
-      "name": "Longsword",
-      "abl": "STR",
+      "name": "Dragonspear",
+      "abl": "CHA",
       "prof": true,
-      "magic": 1,
       "misc": 0,
-      "range": "5 ft",
-      "dmg1": "1d8",
-      "dmg1type": "slashing",
+      "magic": 1,
+      "dmg1": "1d6",
+      "dmg1type": "Piercing",
+      "dmg2": "1d6",
+      "dmg2type": "Fire",
       "addAblToDamage": true,
-      "damageBonus": 0
+      "damageBonus": 0,
+      "range": "5 ft"
     },
     {
-      "name": "Heavy Crossbow",
-      "abl": "DEX",
+      "name": "True Strike",
+      "abl": "CHA",
       "prof": true,
-      "magic": 0,
       "misc": 0,
-      "range": "100/400 ft",
-      "dmg1": "1d10",
-      "dmg1type": "piercing",
+      "magic": 1,
+      "dmg1": "3d6",
+      "dmg1type": "Radiant",
       "addAblToDamage": true,
-      "damageBonus": 0
+      "damageBonus": 4,
+      "range": "5 ft"
+    },
+    {
+      "name": "Leafwarden",
+      "abl": "CHA",
+      "prof": true,
+      "misc": 0,
+      "magic": 1,
+      "dmg1": "1d8",
+      "dmg1type": "Slashing",
+      "addAblToDamage": true,
+      "damageBonus": 0,
+      "range": "5 ft"
+    },
+    {
+      "name": "Leafwarden vs. Dragons",
+      "abl": "CHA",
+      "prof": true,
+      "misc": 0,
+      "magic": 1,
+      "dmg1": "1d8+3d6",
+      "dmg1type": "Slashing",
+      "addAblToDamage": true,
+      "damageBonus": 0,
+      "range": "5 ft"
     }
   ],
-
+  "spellSlots": {
+    "1": { "max": 2 }
+  },
+  "pactSlots": {
+    "3": { "max": 2, "recharge": "shortRest" }
+  },
   "features": [
     {
-      "name": "Divine Smite",
-      "text": "Expend a spell slot to deal radiant damage on a weapon hit.",
+      "name": "Lay on Hands",
+      "desc": "Touch a creature to heal them.",
+      "text": "Your blessed touch can heal wounds...",
+      "chargesMax": 5
+    },
+    {
+      "name": "Weapon Mastery",
+      "desc": "Sap.",
+      "text": "Your training with weapons allows you to..."
+    },
+    {
+      "name": "Pact of the Chain",
+      "desc": "Gain pseudodragon familiar.",
+      "text": "You learn the Find Familiar spell..."
+    },
+    {
+      "name": "Pact of the Blade",
+      "desc": "Bond with a Pact Weapon.",
+      "text": "As a Bonus Action, you can conjure a pact weapon..."
+    },
+    {
+      "name": "Thirsting Blade",
+      "text": "You gain the Extra Attack feature for your pact weapon..."
+    },
+    {
+      "name": "Eldritch Smite",
+      "desc": "Use a Pact Slot to smite.",
+      "text": "Once per turn when you hit a creature..."
+    },
+    {
+      "name": "Lessons of the First Ones",
+      "desc": "Choose an Origin Feat: Skilled.",
+      "text": "You have received knowledge from an elder entity..."
+    },
+    {
+      "name": "Healing Light",
+      "desc": "Heal a creature within 60 ft.",
+      "text": "You gain the ability to channel celestial energy...",
+      "chargesMax": 6
+    },
+    {
+      "name": "Breath Weapon",
+      "desc": "Expel a breath of cold.",
+      "text": "When you take the Attack action, you can replace...",
+      "chargesMax": 3
+    },
+    {
+      "name": "Draconic Resistance",
+      "desc": "Resist Cold damage.",
+      "text": "You have resistance to Cold Damage."
+    },
+    {
+      "name": "Draconic Flight",
+      "desc": "Gain a 30 ft. Fly Speed.",
+      "text": "When you reach character level 5, you can channel...",
+      "chargesMax": 1
+    },
+    {
+      "name": "War Caster",
+      "desc": "Advantage on Concentration saves.",
+      "text": "Concentration. You have Advantage..."
+    },
+    {
+      "name": "Smite",
+      "desc": "Smite your foe.",
+      "text": "Quick smite roller for Divine (1st) and Eldritch (3rd).",
       "smiteLauncher": true
     },
     {
-      "name": "Lay on Hands",
-      "text": "Pool of healing you can use to restore hit points.",
-      "chargesMax": 25,
-      "charges": 25
+      "name": "Magical Cunning",
+      "desc": "Regain 1 Pact Slot.",
+      "text": "You can perform an esoteric rite...",
+      "chargesMax": 1
     },
     {
-      "name": "Channel Divinity",
-      "text": "Harness divine power according to your oath.",
-      "chargesMax": 1,
-      "charges": 1
+      "name": "Radiant Soul",
+      "desc": "Add CHA to Radiant spells",
+      "text": "Your link to your patron allows you to serve..."
     }
   ],
-
-  "inventory": {
-    "magic": [
-      { "name": "Ring of Protection", "rarity": "rare" },
-      { "name": "Pearl of Power", "rarity": "uncommon", "chargesMax": 1, "charges": 1 }
-    ]
-  },
-
+  "skills": [
+    { "key": "Acrobatics", "abl": "DEX", "prof": true },
+    { "key": "Animal Handling", "abl": "WIS", "prof": false },
+    { "key": "Arcana", "abl": "INT", "prof": true },
+    { "key": "Athletics", "abl": "STR", "prof": false },
+    { "key": "Deception", "abl": "CHA", "prof": false },
+    { "key": "History", "abl": "INT", "prof": false },
+    { "key": "Insight", "abl": "WIS", "prof": false },
+    { "key": "Intimidation", "abl": "CHA", "prof": false },
+    { "key": "Investigation", "abl": "INT", "prof": false },
+    { "key": "Medicine", "abl": "WIS", "prof": false },
+    { "key": "Nature", "abl": "INT", "prof": true },
+    { "key": "Perception", "abl": "WIS", "prof": false },
+    { "key": "Performance", "abl": "CHA", "prof": true },
+    { "key": "Persuasion", "abl": "CHA", "prof": true },
+    { "key": "Religion", "abl": "INT", "prof": true },
+    { "key": "Sleight of Hand", "abl": "DEX", "prof": false },
+    { "key": "Stealth", "abl": "DEX", "prof": true },
+    { "key": "Survival", "abl": "WIS", "prof": false }
+  ],
   "spells": [
     {
-      "name": "Bless",
-      "level": 1,
-      "components": { "v": true, "s": true, "m": true },
-      "concentration": true,
-      "ritual": false,
-      "short": "Up to 3 creatures add 1d4 to attacks and saves.",
-      "long": "You bless up to three creatures of your choice within range...",
-      "cast": { "kind": "spell", "slotLevel": 1 }
-    },
-    {
-      "name": "Cure Wounds",
-      "level": 1,
+      "level": 0,
+      "name": "Eldritch Blast",
       "components": { "v": true, "s": true, "m": false },
+      "ritual": false,
       "concentration": false,
-      "ritual": false,
-      "short": "Touch heals 1d8 + mod.",
-      "long": "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier.",
-      "cast": { "kind": "spell", "slotLevel": 1 }
+      "desc": "Ranged spell attack.",
+      "text": "Beam(s) of crackling energy...",
+      "cast": null,
+      "macro": "&{template:atkdmg} {{rname=Eldritch Blast}} ..."
     },
     {
-      "name": "Shield of Faith",
+      "level": 0,
+      "name": "Light",
+      "components": { "v": true, "s": false, "m": true },
+      "ritual": false,
+      "concentration": false,
+      "desc": "20/20 ft. of Light.",
+      "text": "You touch one Large or smaller object..."
+    },
+    {
       "level": 1,
+      "name": "Bless",
       "components": { "v": true, "s": true, "m": true },
-      "concentration": true,
       "ritual": false,
-      "short": "+2 AC to a creature for duration.",
-      "long": "A shimmering field appears and surrounds a creature of your choice granting +2 AC for the duration.",
+      "concentration": true,
+      "desc": "+1d4 to attacks & saves (conc).",
+      "text": "Up to three creatures of your choice gain...",
       "cast": { "kind": "spell", "slotLevel": 1 }
     },
     {
-      "name": "Searing Smite",
       "level": 1,
-      "components": { "v": true, "s": true, "m": false },
-      "concentration": true,
+      "name": "Shield of Faith",
+      "components": { "v": true, "s": true, "m": true },
       "ritual": false,
-      "short": "Next hit deals extra fire damage.",
-      "long": "The next time you hit a creature with a melee weapon attack during this spell’s duration, your weapon flares with white‑hot intensity.",
+      "concentration": true,
+      "desc": "+2 AC (conc).",
+      "text": "A shimmering field appears and gives +2 AC...",
       "cast": { "kind": "spell", "slotLevel": 1 }
+    },
+    {
+      "level": 2,
+      "name": "Invisibility",
+      "components": { "v": true, "s": true, "m": true },
+      "ritual": false,
+      "concentration": true,
+      "desc": "Turn a creature invisible (conc).",
+      "text": "A creature you touch becomes invisible...",
+      "cast": { "kind": "spell", "slotLevel": 2 }
+    },
+    {
+      "level": 3,
+      "name": "Spirit Shroud",
+      "components": { "v": true, "s": true, "m": false },
+      "ritual": false,
+      "concentration": true,
+      "desc": "Attacks deal +1d8 cold/rad/nec...",
+      "text": "You call forth spirits to assist you...",
+      "cast": { "kind": "spell", "slotLevel": 3 }
+    },
+    {
+      "level": 3,
+      "name": "Thunder Step",
+      "components": { "v": true, "s": true, "m": false },
+      "ritual": false,
+      "concentration": false,
+      "desc": "Teleport; thunder damage at origin.",
+      "text": "You teleport up to 90 ft...",
+      "cast": { "kind": "spell", "slotLevel": 3 }
     }
   ],
-
-  "spellSlots": {
-    "1": { "max": 4 },
-    "2": { "max": 2 }
-  },
-
-  "pactSlots": {
-    "2": { "max": 0 }
+  "inventory": {
+    "magic": [
+      { "name": "Dragon's Wrath Spear", "rarity": "rare" },
+      { "name": "Dragonslayer Longsword", "rarity": "rare" },
+      { "name": "Enspelled Breastplate", "rarity": "uncommon", "chargesMax": 6 },
+      { "name": "Shield +1", "rarity": "uncommon" },
+      { "name": "Scaled Ornament", "rarity": "uncommon" },
+      { "name": "Adamantine Breastplate", "rarity": "uncommon" },
+      { "name": "Instrument of Illusions", "rarity": "common" }
+    ],
+    "mundane": [
+      { "name": "Rations (days)", "qty": 5 },
+      { "name": "Rope (50 ft)", "qty": 1 }
+    ]
   }
 }
