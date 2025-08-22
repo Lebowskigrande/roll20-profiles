@@ -1,34 +1,69 @@
-- // ---- Slot persistence & helpers ----
+diff --git a/userscript.user.js b/userscript.user.js
+index 1111111..2222222 100644
+--- a/userscript.user.js
++++ b/userscript.user.js
+@@ -45,6 +45,8 @@
+   // 2) make it globally visible for overlay.js if it expects window.characterData
+   window.characterData = characterData;
+ 
++  // Ensure saved slot counts are loaded BEFORE any rendering happens
++  hydrateSlotsFromStorage();
+   // ---------- Persistent global damage modifiers ----------
+   function getGlobalMods(){
+     const v = GM_getValue('r20_global_mods', null);
+@@ -118,17 +120,6 @@ function buildSimpleRoll({ rname, mod, charname }){
+   }
+ 
+-  // ---- Slot persistence & helpers ----
+-// Utility: ensure .cur exists
 -function ensureCur(obj) {
 -  for (const lvl in obj) {
 -    if (obj[lvl].cur == null) obj[lvl].cur = obj[lvl].max; // start full
 -  }
 -}
-+// ---- Slot persistence & helpers ----
-+function ensureCur(obj = {}) {
-+  for (const lvl in obj) {
-+    if (obj[lvl].cur == null) obj[lvl].cur = obj[lvl].max || 0; // start full
-+  }
-+}
-
- // (keep hydrateSlotsFromStorage, getSpellSlotState, getPactSlotState as you have)
-
+-
+-// ---- Slot persistence & helpers ----
+-// (kept below as the single source of truth)
+-
+ // ---- Slot persistence & helpers ----
+ function ensureCur(obj = {}) {
+   for (const lvl in obj) {
+@@ -156,7 +147,6 @@ function hydrateSlotsFromStorage(){
+   ensureCur(characterData.pactSlots);
+ }
+ 
 -const ordinal = n => (n===1?'1st':n===2?'2nd':n===3?'3rd':`${n}th`);
-  // ^^^ REMOVE THIS duplicate if you already declared it above
-
- // ... buildSlotGroup, renderSlotsUI (grid version), wireSlotsClicks ...
-
- // In wireInteractions(...)
--// Slots UI (grid with pact left, spell slots right)
--renderSlotsUI(root);
-+// Slots UI (grid with pact left, spell slots right)
-+hydrateSlotsFromStorage();
-+renderSlotsUI(root);
- wireSlotsClicks(root);
-
--// (later in the file)
+ 
+ function getSpellSlotState(lvl) {
+   ensureCur(characterData.spellSlots);
+@@ -167,6 +157,7 @@ function getPactSlotState(lvl) {
+   return characterData.pactSlots?.[lvl] || { max: 0, cur: 0 };
+ }
+ 
++const ordinal = n => (n===1?'1st':n===2?'2nd':n===3?'3rd':`${n}th`);
+ 
+ function buildSlotGroup(kind, lvl, align){
+   const wrap = document.createElement('div');
+@@ -242,13 +233,6 @@ function rechargeSlot(kind, lvl){
+   return true;
+ }
+ 
 -function renderSlotsUI(root){
 -  renderSpellSlots(root);
 -  renderPactSlots(root);
 -}
-+// ^^^ REMOVE this entire fallback definition
+-
+-
+-
+   // ---------- Attack builder with global modifiers ----------
+   function buildAtkdmgTemplate(attack, { adv = 'normal' } = {}) {
+     const a = attack;
+@@ -493,8 +477,8 @@ tabBar.addEventListener('click', (e)=>{
+ });
+ 
+ 
+-// Slots UI (grid with pact left, spell slots right)
+-renderSlotsUI(root);
++// Slots UI (grid with pact left, spell slots right); hydrate already called above
++renderSlotsUI(root);
+ wireSlotsClicks(root);
