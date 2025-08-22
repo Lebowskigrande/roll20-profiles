@@ -1,0 +1,34 @@
+- // ---- Slot persistence & helpers ----
+-function ensureCur(obj) {
+-  for (const lvl in obj) {
+-    if (obj[lvl].cur == null) obj[lvl].cur = obj[lvl].max; // start full
+-  }
+-}
++// ---- Slot persistence & helpers ----
++function ensureCur(obj = {}) {
++  for (const lvl in obj) {
++    if (obj[lvl].cur == null) obj[lvl].cur = obj[lvl].max || 0; // start full
++  }
++}
+
+ // (keep hydrateSlotsFromStorage, getSpellSlotState, getPactSlotState as you have)
+
+-const ordinal = n => (n===1?'1st':n===2?'2nd':n===3?'3rd':`${n}th`);
+  // ^^^ REMOVE THIS duplicate if you already declared it above
+
+ // ... buildSlotGroup, renderSlotsUI (grid version), wireSlotsClicks ...
+
+ // In wireInteractions(...)
+-// Slots UI (grid with pact left, spell slots right)
+-renderSlotsUI(root);
++// Slots UI (grid with pact left, spell slots right)
++hydrateSlotsFromStorage();
++renderSlotsUI(root);
+ wireSlotsClicks(root);
+
+-// (later in the file)
+-function renderSlotsUI(root){
+-  renderSpellSlots(root);
+-  renderPactSlots(root);
+-}
++// ^^^ REMOVE this entire fallback definition
