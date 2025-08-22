@@ -1,7 +1,7 @@
 {
-    name: "Ecthelion",
-    profBonus: 3,
-    abilities: {
+    "name": "Ecthelion",
+    "profBonus": 3,
+    "abilities": {
       STR: { score:13, mod:+1, save:+1 },
       DEX: { score:14, mod:+2, save:+2 },
       CON: { score:14, mod:+2, save:+2 },
