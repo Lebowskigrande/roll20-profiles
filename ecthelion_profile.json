@@ -2,12 +2,12 @@
   "name": "Ecthelion",
   "profBonus": 3,
   "abilities": {
-    "STR": { "score": 13, "prof": false },
-    "DEX": { "score": 14, "prof": false },
-    "CON": { "score": 14, "prof": false },
-    "INT": { "score": 8, "prof": false },
-    "WIS": { "score": 9, "prof": true },
-    "CHA": { "score": 18, "prof": true }
+    "STR": { "score": 13, "mod": 1, "prof": false },
+    "DEX": { "score": 14, "mod": 2,  "prof": false },
+    "CON": { "score": 14, "mod": 2,  "prof": false },
+    "INT": { "score": 8, "mod": -1,  "prof": false },
+    "WIS": { "score": 9, "mod": -1,  "prof": true },
+    "CHA": { "score": 18, "mod": 4,  "prof": true }
   },
   "attacks": [
     {
