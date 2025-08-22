@@ -7,7 +7,6 @@
 // @grant        GM.xmlHttpRequest
 // @connect      raw.githubusercontent.com
 
-// @resource     https://raw.githubusercontent.com/Lebowskigrande/roll20-profiles/main/ecthelion_profile.json
 // ==/UserScript==
 
 // needs: // @grant GM.xmlHttpRequest
@@ -106,56 +105,190 @@ function buildSimpleRoll({ rname, mod, charname }){
   }
 
   // ---- Slot persistence & helpers ----
-  function getSlotState(kind, level){
-    const key = `slots_${kind}_${level}`;
-    const max = (kind==='spell'
-                 ? (characterData.spellSlots[level]?.max||0)
-                 : (characterData.pactSlots[level]?.max||0));
-    let cur = GM_getValue(key, null);
-    if (cur == null){ cur = max; GM_SetValue_silent(key, cur); }
-    return { cur, max };
+// Utility: ensure .cur exists
+function ensureCur(obj) {
+  for (const lvl in obj) {
+    if (obj[lvl].cur == null) obj[lvl].cur = obj[lvl].max; // start full
   }
-  function setSlotState(kind, level, cur){
-    const key = `slots_${kind}_${level}`;
-    const max = (kind==='spell'
-                 ? (characterData.spellSlots[level]?.max||0)
-                 : (characterData.pactSlots[level]?.max||0));
-    cur = Math.max(0, Math.min(max, cur));
-    GM_SetValue_silent(key, cur);
-    window.dispatchEvent(new CustomEvent('r20Overlay:slots', { detail:{ kind, level, cur, max }}));
-    return { cur, max };
+}
+
+// ---- Slot persistence & helpers ----
+function ensureCur(obj = {}) {
+  for (const lvl in obj) {
+    if (obj[lvl].cur == null) obj[lvl].cur = obj[lvl].max || 0; // start full
   }
-  function consumeSlot(kind, level){
-    const st = getSlotState(kind, level);
-    if (st.cur <= 0) return false;
-    setSlotState(kind, level, st.cur - 1);
-    return true;
+}
+function hydrateSlotsFromStorage(){
+  const saved = GM_getValue('r20_slots', null);
+  if (!saved) { ensureCur(characterData.spellSlots); ensureCur(characterData.pactSlots); return; }
+
+  if (saved.spellSlots && characterData.spellSlots){
+    for (const lvl in characterData.spellSlots){
+      const cur = saved.spellSlots?.[lvl]?.cur;
+      if (Number.isFinite(cur)) {
+        const max = characterData.spellSlots[lvl].max || 0;
+        characterData.spellSlots[lvl].cur = Math.max(0, Math.min(max, cur));
+      }
+    }
   }
-  function rechargeSlot(kind, level){
-    const st = getSlotState(kind, level);
-    if (st.cur >= st.max) return false;
-    setSlotState(kind, level, st.cur + 1);
-    return true;
+  if (saved.pactSlots && characterData.pactSlots){
+    for (const lvl in characterData.pactSlots){
+      const cur = saved.pactSlots?.[lvl]?.cur;
+      if (Number.isFinite(cur)) {
+        const max = characterData.pactSlots[lvl].max || 0;
+        characterData.pactSlots[lvl].cur = Math.max(0, Math.min(max, cur));
+      }
+    }
+  }
+  ensureCur(characterData.spellSlots);
+  ensureCur(characterData.pactSlots);
+}
+
+const ordinal = n => (n===1?'1st':n===2?'2nd':n===3?'3rd':`${n}th`);
+
+function getSpellSlotState(lvl) {
+  ensureCur(characterData.spellSlots);
+  return characterData.spellSlots?.[lvl] || { max: 0, cur: 0 };
+}
+function getPactSlotState(lvl) {
+  ensureCur(characterData.pactSlots);
+  return characterData.pactSlots?.[lvl] || { max: 0, cur: 0 };
+}
+
+const ordinal = n => (n===1?'1st':n===2?'2nd':n===3?'3rd':`${n}th`);
+
+function buildSlotGroup(kind, lvl, align){
+  const wrap = document.createElement('div');
+  wrap.className = `slotRow2 ${align}`;
+  wrap.dataset.kind = kind;
+  wrap.dataset.lvl  = String(lvl);
+
+  // state
+  const s = (kind === 'spell')
+    ? getSpellSlotState(String(lvl))
+    : getPactSlotState(String(lvl));
+
+  // label
+  const label = document.createElement('span');
+  label.className = 'slotsLabel semibold';
+  label.textContent = (kind === 'pact')
+    ? `Pact ${ordinal(lvl)}:`
+    : `${ordinal(lvl)}:`;
+
+  // dots
+  const dots = document.createElement('div');
+  dots.className = 'dots';
+  dots.innerHTML = Array.from({length: s.max}, (_, i) => `
+    <span class="slotDot ${i < s.cur ? 'filled' : 'empty'}"
+          data-kind="${kind}" data-lvl="${lvl}" data-index="${i}"
+          title="${i < s.cur ? 'Click to consume' : 'Click to recharge'}"></span>
+  `).join('');
+
+  // add to row (for right-aligned rows, label should precede dots so it hugs the right nicely)
+  if (align === 'right') {
+    wrap.appendChild(label);
+    wrap.appendChild(dots);
+  } else {
+    wrap.appendChild(label);
+    wrap.appendChild(dots);
   }
 
-  // Build the pills (now glowing dots) for both groups
-  function renderSlotsUI(root){
-    const spellRow = root.getElementById('spellSlotsRow');
-    const pactRow  = root.getElementById('pactSlotsRow');
-    if (!spellRow || !pactRow) return;
+  return wrap;
+}
 
-    const s = getSlotState('spell','1');
-    spellRow.innerHTML = Array.from({length: s.max}, (_,i)=>{
-      const filled = i < s.cur;
-      return `<span class="slotDot ${filled?'filled':'empty'}" data-kind="spell" data-lvl="1" data-index="${i}" title="${filled?'Click to consume':'Click to recharge'}"></span>`;
-    }).join('');
+function renderSlotsUI(root){
+  const grid = root.getElementById('slotsGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
 
-    const p = getSlotState('pact','3');
-    pactRow.innerHTML = Array.from({length: p.max}, (_,i)=>{
-      const filled = i < p.cur;
-      return `<span class="slotDot ${filled?'filled':'empty'}" data-kind="pact" data-lvl="3" data-index="${i}" title="${filled?'Click to consume':'Click to recharge'}"></span>`;
-    }).join('');
+  // collect levels
+  const pactLevels  = Object.keys(characterData.pactSlots  || {}).map(Number).sort((a,b)=>a-b);
+  const spellLevels = Object.keys(characterData.spellSlots || {}).map(Number).sort((a,b)=>a-b);
+
+  let row = 1;
+
+  // Row 1: Pact left (if present)
+  if (pactLevels.length){
+    const pl = pactLevels[0];
+    const node = buildSlotGroup('pact', pl, 'left');
+    node.style.gridColumn = '1';
+    node.style.gridRow    = String(row);
+    grid.appendChild(node);
   }
+
+  // Row 1: 1st-level spells right (if present)
+  if (spellLevels.includes(1)){
+    const node = buildSlotGroup('spell', 1, 'right');
+    node.style.gridColumn = '2';
+    node.style.gridRow    = String(row);
+    grid.appendChild(node);
+  }
+
+  // Remaining rows: 2nd..9th on the right, one per row
+  row++;
+  for (const lvl of spellLevels.filter(n => n !== 1)){
+    const node = buildSlotGroup('spell', lvl, 'right');
+    node.style.gridColumn = '2';
+    node.style.gridRow    = String(row++);
+    grid.appendChild(node);
+  }
+}
+
+// Hook clicks on the grid
+function wireSlotsClicks(root){
+  root.getElementById('slotsGrid')?.addEventListener('click', (e)=>{
+    const dot  = e.target.closest('.slotDot'); if (!dot) return;
+    const kind = dot.dataset.kind; // 'spell' | 'pact'
+    const lvl  = dot.dataset.lvl;
+    const isFilled = dot.classList.contains('filled');
+    if (isFilled) consumeSlot(kind, lvl);
+    else          rechargeSlot(kind, lvl);
+    renderSlotsUI(root);
+  });
+}
+
+
+function persistSlots(){
+  GM_setValue('r20_slots', {
+    spellSlots: characterData.spellSlots,
+    pactSlots: characterData.pactSlots
+  });
+  window.dispatchEvent(new CustomEvent('r20Overlay:slots', { detail: characterData }));
+}
+
+function consumeSlot(kind, lvl){
+  if (kind === 'spell'){
+    const s = getSpellSlotState(lvl);
+    if (s.cur <= 0) return false;
+    s.cur -= 1;
+  } else {
+    const p = getPactSlotState(lvl);
+    if (p.cur <= 0) return false;
+    p.cur -= 1;
+  }
+  persistSlots();
+  return true;
+}
+function rechargeSlot(kind, lvl){
+  if (kind === 'spell'){
+    const s = getSpellSlotState(lvl);
+    if (s.cur >= s.max) return false;
+    s.cur += 1;
+  } else {
+    const p = getPactSlotState(lvl);
+    if (p.cur >= p.max) return false;
+    p.cur += 1;
+  }
+  persistSlots();
+  return true;
+}
+
+function renderSlotsUI(root){
+  renderSpellSlots(root);
+  renderPactSlots(root);
+}
+
+
 
   // ---------- Attack builder with global modifiers ----------
   function buildAtkdmgTemplate(attack, { adv = 'normal' } = {}) {
@@ -213,7 +346,7 @@ function buildSimpleRoll({ rname, mod, charname }){
     const r1  = `[[1d20${atkBonusText}]]`;
     const r2  = `[[1d20${atkBonusText}]]`;
     const mode = adv==='adv' ? 'advantage' : adv==='dis' ? 'disadvantage' : adv==='always' ? 'always' : 'normal';
-      
+
     const dmg1Inline = `[[(${primaryGroup[1].join(' + ')})${fmtBonus(dmgBonus)}]]`;
 
     let msg = `&{template:atkdmg}`
@@ -463,6 +596,34 @@ function buildSimpleRoll({ rname, mod, charname }){
         .slotDot.empty:hover{ box-shadow: 0 0 0 2px #0c5e611a inset; }
         .slotDot:active{ transform: scale(.96); }
 
+.slotsGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr; /* left = pact, right = spell level */
+  gap: 10px 16px;                 /* row-gap, column-gap */
+  align-items:center;
+}
+
+.slotRow2{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.slotRow2.left  { justify-content:flex-start; }
+.slotRow2.right { justify-content:flex-end; }
+
+.slotsLabel{
+  font-size:12px;
+  color:#374151;
+  white-space:nowrap;
+}
+
+.dots{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+
         /* Magic item rarity text colors */
         .r-uncommon { color:#10b981; }  /* green */
         .r-rare     { color:#3b82f6; }  /* blue */
@@ -588,16 +749,11 @@ function buildSimpleRoll({ rname, mod, charname }){
 
                 <!-- Spells -->
                 <section class="tabPanel" data-panel="spells">
-                  <div class="slotsPanel" id="slotsPanel">
-                    <div class="slotGroupInline">
-                      <span class="slotsTitle semibold">Spell Slots (1st):</span>
-                      <div class="slotsRow" id="spellSlotsRow"></div>
-                    </div>
-                    <div class="slotGroupInline">
-                      <span class="slotsTitle semibold">Pact Slots (3rd):</span>
-                      <div class="slotsRow" id="pactSlotsRow"></div>
-                    </div>
-                  </div>
+                  <!-- Spells tab -->
+<div class="slotsPanel" id="slotsPanel">
+  <div id="slotsGrid" class="slotsGrid"></div>
+</div>
+
 
                   <div class="list" id="spellList">
                     <header><span>Name</span><span></span><span></span><span>Info</span></header>
@@ -990,16 +1146,11 @@ tabBar.addEventListener('click', (e)=>{
 });
 
 
-    // Slots UI (big glowing dots)
-    renderSlotsUI(root);
-    root.getElementById('slotsPanel')?.addEventListener('click', (e)=>{
-      const dot = e.target.closest('.slotDot'); if (!dot) return;
-      const kind = dot.dataset.kind;     // 'spell' | 'pact'
-      const lvl  = dot.dataset.lvl;      // '1' | '3'
-      if (dot.classList.contains('filled')) consumeSlot(kind, lvl);
-      else                                  rechargeSlot(kind, lvl);
-      renderSlotsUI(root);
-    });
+// Slots UI (grid with pact left, spell slots right)
+hydrateSlotsFromStorage();    
+renderSlotsUI(root);
+wireSlotsClicks(root);
+
 
     // Abilities roll
 root.getElementById('stats').addEventListener('click', (e)=>{
