@@ -60,7 +60,6 @@ function loadCharacterData(url) {
   // ---------- Helpers ----------
   const ABL_ORDER = ["STR","DEX","CON","INT","WIS","CHA"];
   const fmtBonus = n => (n>=0?`+${n}`:`${n}`);
-  const fmtSign  = n => (n>=0?`+${n}`:`${n}`);
   const getSave  = abl => (characterData.abilities[abl].mod||0) + (characterData.abilities[abl].prof ? characterData.profBonus : 0);
 function buildSimpleRoll({ rname, mod, charname }){
   const m = mod >= 0 ? `+${mod}` : `${mod}`;
@@ -170,7 +169,7 @@ function buildSimpleRoll({ rname, mod, charname }){
 
     const atkBonusBase = ablMod + pbVal + magic + misc;
     const blessBonus   = mods.bless ? ' + 1d4' : '';
-    const atkBonusText = fmtSign(atkBonusBase) + blessBonus;
+    const atkBonusText = fmtBonus(atkBonusBase) + blessBonus;
 
     const primaryDice = a.dmg1 ?? a.dice ?? '1d8';
     const primaryType = (a.dmg1type ?? a.dmgType ?? 'bludgeoning').toLowerCase();
@@ -215,10 +214,10 @@ function buildSimpleRoll({ rname, mod, charname }){
     const r2  = `[[1d20${atkBonusText}]]`;
     const mode = adv==='adv' ? 'advantage' : adv==='dis' ? 'disadvantage' : adv==='always' ? 'always' : 'normal';
       
-    const dmg1Inline = `[[(${primaryGroup[1].join(' + ')})${fmtSign(dmgBonus)}]]`;
+    const dmg1Inline = `[[(${primaryGroup[1].join(' + ')})${fmtBonus(dmgBonus)}]]`;
 
     let msg = `&{template:atkdmg}`
-      + ` {{mod=${fmtSign(atkBonusBase)}${mods.bless?' + 1d4':''}}}`
+      + ` {{mod=${fmtBonus(atkBonusBase)}${mods.bless?' + 1d4':''}}}`
       + ` {{rname=${rname}}} {{r1=${r1}}}`
       + ((mode==='advantage'||mode==='disadvantage'||mode==='always')?` {{r2=${r2}}}`:'')
       + ` {{${mode}=1}} {{attack=1}} {{range=${range}}}`
