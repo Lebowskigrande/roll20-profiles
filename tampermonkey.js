@@ -155,8 +155,6 @@ function getPactSlotState(lvl) {
   return characterData.pactSlots?.[lvl] || { max: 0, cur: 0 };
 }
 
-const ordinal = n => (n===1?'1st':n===2?'2nd':n===3?'3rd':`${n}th`);
-
 function buildSlotGroup(kind, lvl, align){
   const wrap = document.createElement('div');
   wrap.className = `slotRow2 ${align}`;
