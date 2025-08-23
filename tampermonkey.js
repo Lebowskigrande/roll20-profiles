@@ -281,12 +281,6 @@ function rechargeSlot(kind, lvl){
   return true;
 }
 
-function renderSlotsUI(root){
-  renderSpellSlots(root);
-  renderPactSlots(root);
-}
-
-
 
   // ---------- Attack builder with global modifiers ----------
   function buildAtkdmgTemplate(attack, { adv = 'normal' } = {}) {
