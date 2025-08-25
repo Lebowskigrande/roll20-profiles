@@ -882,6 +882,91 @@ function loadCharacterData(url) {
       menu.style.left = x + 'px'; menu.style.top  = y + 'px'; menu.style.visibility = 'visible';
     });
   }
+        function closeSmite(){ root.getElementById('smiteMask')?.classList.remove('show'); }
+    function buildSmiteMsg({ useSpell, usePact, undead, prone, crit }){
+      let divDice = 0;
+      if (useSpell){ divDice = 2 + (undead ? 1 : 0); if (crit) divDice *= 2; }
+      let eldDice = 0;
+      if (usePact){ eldDice = 1 + 3; if (crit) eldDice *= 2; }
+      let msg = `&{template:atkdmg} {{rname=Smite}} {{damage=1}}`;
+      if (useSpell){ msg += ` {{dmg1flag=1}} {{dmg1=[[${divDice}d8]]}} {{dmg1type=Radiant}}`; }
+      if (usePact){ msg += ` {{dmg2flag=1}} {{dmg2=[[${eldDice}d8]]}} {{dmg2type=Force}}`; }
+      const notes = [];
+      if (useSpell && undead) notes.push("Undead target");
+      if (usePact && prone)  notes.push("Knock Prone");
+      if (crit)              notes.push("Critical");
+      if (notes.length) msg += ` {{range=${notes.join(" • ")}}}`;
+      msg += ` {{charname=${characterData.name}}}`;
+      return msg;
+    }
+
+    // --- Skills: chips + row roll (event delegation) ---
+const skillRows = root.querySelector('#skillList .rows');
+
+// Tiny helper if not already defined:
+function nextABL(cur){
+  const order = ["STR","DEX","CON","INT","WIS","CHA"];
+  const i = order.indexOf(cur);
+  return order[(i + 1 + order.length) % order.length];
+}
+
+if (skillRows) {
+  const bonusOf = (sk) =>
+    (characterData.abilities[sk.abl].mod || 0) +
+    (sk.prof ? characterData.profBonus : 0);
+
+  skillRows.addEventListener('click', (e) => {
+    const chip = e.target.closest('.chip[data-skill]');
+    if (chip) {
+      const i  = +chip.dataset.skill;
+      const sk = characterData.skills[i];
+      const row = chip.closest('.row[data-skill]');
+      if (!row) return;
+
+      // Ability cycle
+      if (chip.dataset.act === 'ABL') {
+        sk.abl = nextABL(sk.abl);
+        const ablChip = row.querySelector('.chip[data-act="ABL"]');
+        if (ablChip) ablChip.textContent = sk.abl;
+
+        const newBonus = bonusOf(sk);
+        const bonusCell = row.querySelector('[data-col="bonus"]');
+        if (bonusCell) bonusCell.textContent = (newBonus >= 0 ? `+${newBonus}` : `${newBonus}`);
+        e.stopPropagation(); // prevent row roll
+        return;
+      }
+
+      // Proficiency toggle
+      if (chip.dataset.act === 'PROF') {
+        sk.prof = !sk.prof;
+        const pChip = row.querySelector('.chip[data-act="PROF"]');
+        if (pChip) {
+          pChip.textContent = sk.prof ? 'Prof' : 'NoProf';
+          pChip.classList.toggle('meta', !sk.prof);
+        }
+        const newBonus = bonusOf(sk);
+        const bonusCell = row.querySelector('[data-col="bonus"]');
+        if (bonusCell) bonusCell.textContent = (newBonus >= 0 ? `+${newBonus}` : `${newBonus}`);
+        e.stopPropagation(); // prevent row roll
+        return;
+      }
+    }
+
+    // Row click = roll the skill
+    const row = e.target.closest('.row[data-skill]');
+    if (!row) return;
+    const i  = +row.dataset.skill;
+    const sk = characterData.skills[i];
+    const total = bonusOf(sk);
+
+    sendToChat(
+      (typeof buildSimpleRoll === 'function')
+        ? buildSimpleRoll({ rname: `${sk.key} (${sk.abl})`, mod: total, charname: characterData.name })
+        : `/em ${characterData.name} rolls ${sk.key} (${sk.abl})\n/roll 1d20 ${total>=0?`+${total}`:total}`
+    );
+  });
+}
+
 
   // Utils
   function GM_SetValue_silent(k,v){ try{ GM_setValue(k,v); }catch(e){} }
