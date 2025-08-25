@@ -562,6 +562,8 @@ function loadCharacterData(url) {
           </div>
           <div class="ghRight">
             ${p && p.max > 0 ? `
+            <div class="groupTitle">Pact</div>
+
               <div class="dots">
                 ${Array.from({length: p.max}, (_, i) => `
                   <span class="slotDot ${i < p.cur ? 'filled':'empty'}"
